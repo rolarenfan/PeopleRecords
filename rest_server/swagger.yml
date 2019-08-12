@@ -1,0 +1,79 @@
+swagger: "2.0"
+info:
+  description: The swagger file for the PeopleRecords server.
+  version: "1.0.0"
+  title: Swagger REST
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+
+basePath: "/api"
+
+# Paths supported by the server application:
+# • POST /records - Post a single data line in any of the 3 formats supported by your existing code
+# • GET /records/gender - returns records sorted by gender
+# • GET /records/birthdate - returns records sorted by birthdate
+# • GET /records/name - returns records sorted by name
+# • GET /records - TEMP - returns records unsorted
+paths:
+  /records:
+    get:
+      operationId: "records.read_all"
+      tags:
+        - "People"
+      summary: "The people data structure supported by the server application"
+      description: "Read the list of people"
+      responses:
+        200:
+          description: "Successful read people list operation"
+          schema:
+            type: "array"
+            items:
+              properties:
+                fname:
+                  type: "string"
+                lname:
+                  type: "string"
+                birthdate:
+                  type: "string"
+                fcolor:
+                  type: "string"
+                gender:
+                  type: "string"
+
+# TODO change the POST operation to take a line in one of the three formats and parse it.
+    post:
+      operationId: records.create
+      tags:
+        - "People"
+      summary: Create a person and add to the people list
+      description: Create a new person in the people list
+      parameters:
+        - name: person
+          in: body
+          description: Person to create
+          required: True
+          schema:
+            type: object
+            properties:
+              fname:
+                type: string
+                description: First name of person to create
+              lname:
+                type: string
+                description: Last name of person to create
+              birthdate:
+                type: "string"
+                description: Birthdate yyyy/mm/dd of person to create
+              fcolor:
+                type: "string"
+                description: Favorite color of person to create
+              gender:
+                type: "string"
+                description: Gender of person to create
+      responses:
+        201:
+          description: Successfully created person in list
+
+# TODO add the three GET ops to get the data sorted by the fields: gender, birthdate, lname.
