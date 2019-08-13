@@ -31,22 +31,26 @@ def parse_line(line):
     splits = line.split(splitter) if splitter else line.split()
     return [datum.strip() for datum in splits]
 
-
-def parse_file():
-    # Create our little parser:
+def create_parser():
+    """
+        Create an argsparse parser for our CLI.
+    """
     cmd_parser = argparse.ArgumentParser(
         prog='parse_people',
         description='Parse the content of a file, assumed to be '
                     'space-, comma-, or pipe-separated values')
 
-	# Add the one argument, the path to the file:
+    # Add the one argument, the path to the file:
     cmd_parser.add_argument('Path',
                             metavar='path',
                             type=str,
                             help='the file to parse')
 
+    return cmd_parser
+
+def parse_file():
     # Parse the command:
-    args = cmd_parser.parse_args()
+    args = create_parser().parse_args()
 
     input_path = args.Path
     people = []
