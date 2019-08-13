@@ -11,12 +11,12 @@ from model.person import (
 )
 
 def parse_line(line):
-    """
+    '''
         Parse one line of the input file, or the one line sent on the POST.
 
         :param line: string
         :return: [] of string
-    """
+    '''
     if not line:
         return []
 
@@ -32,9 +32,9 @@ def parse_line(line):
     return [datum.strip() for datum in splits]
 
 def create_parser():
-    """
+    '''
         Create an argsparse parser for our CLI.
-    """
+    '''
     cmd_parser = argparse.ArgumentParser(
         prog='parse_people',
         description='Parse the content of a file, assumed to be '
@@ -68,5 +68,5 @@ def parse_file():
                 print(line)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     parse_file()
