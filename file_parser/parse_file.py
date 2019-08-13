@@ -4,7 +4,11 @@ import argparse
 import os
 import sys
 
-from model.person import (Person, sort_by_birthdate, sort_by_gender, sort_by_lastname)
+from model.person import (
+    Person,
+    sort_by_birthdate, sort_by_gender, sort_by_lastname,
+    sorted_list_1, sorted_list_2, sorted_list_3, sorts
+)
 
 def parse_line(line):
     """
@@ -40,18 +44,11 @@ def parse_file():
                             metavar='path',
                             type=str,
                             help='the file to parse')
-    # cmd_parser.add_argument('-s',
-    #                         action='store',
-    #                         choices=['gender', 'birthdate', 'lastname'],
-    #                         help='sorting mode')
 
     # Parse the command:
     args = cmd_parser.parse_args()
 
-    # sort_mode = args.s
-
     input_path = args.Path
-    lines = []
     people = []
 
     if not os.path.isfile(input_path):
@@ -59,13 +56,12 @@ def parse_file():
     else:
         with open(input_path, 'r') as reader:
             for line in reader.readlines():
-                line = parse_line(line)
-                people.append(Person(line))
+                people.append(Person(parse_line(line)))
 
-        # TODO(ptk): extract the sorts into functions to be used here and in server.
-        print([str(person) for person in sorted(people, key=sort_by_birthdate)], '\n')
-        print([str(person) for person in sorted(people, key=sort_by_lastname, reverse=True)], '\n')
-        print([str(person) for person in sorted(sorted(people, key=sort_by_lastname), key=sort_by_gender)])
+        for sort in sorts:
+            print(sort[1])
+            for line in sort[0](people):
+                print(line)
 
 
 if __name__ == "__main__":
