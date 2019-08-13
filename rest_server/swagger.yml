@@ -15,34 +15,54 @@ basePath: "/api"
 # • GET /records/gender - returns records sorted by gender
 # • GET /records/birthdate - returns records sorted by birthdate
 # • GET /records/name - returns records sorted by name
-# • GET /records - TEMP - returns records unsorted
 paths:
-  /records:
+  /records/birthdate:
     get:
-      operationId: "records.read_all"
+      operationId: "records.sorted_birthdate"
       tags:
         - "People"
       summary: "The people data structure supported by the server application"
-      description: "Read the list of people"
+      description: "Read the list of people, sorted by birthdate"
       responses:
         200:
-          description: "Successful read people list operation"
+          description: "Successful read people, sorted by birthdate"
           schema:
-            type: "array"
-            items:
-              properties:
-                fname:
-                  type: "string"
-                lname:
-                  type: "string"
-                birthdate:
-                  type: "string"
-                fcolor:
-                  type: "string"
-                gender:
-                  type: "string"
+            type: object
+            properties:
+              line:
+                type: "string"
+  /records/gender:
+    get:
+      operationId: "records.sorted_gender"
+      tags:
+        - "People"
+      summary: "The people data structure supported by the server application"
+      description: "Read the list of people, sorted by gender then last name"
+      responses:
+        200:
+          description: "Successful read people, sorted by gender then last name"
+          schema:
+            type: object
+            properties:
+              line:
+                type: "string"
+  /records/name:
+    get:
+      operationId: "records.sorted_name"
+      tags:
+        - "People"
+      summary: "The people data structure supported by the server application"
+      description: "Read the list of people, sorted by last name"
+      responses:
+        200:
+          description: "Successful read people, sorted by last name"
+          schema:
+            type: object
+            properties:
+              line:
+                type: "string"
 
-# TODO change the POST operation to take a line in one of the three formats and parse it.
+  /records:
     post:
       operationId: records.create
       tags:
@@ -57,23 +77,9 @@ paths:
           schema:
             type: object
             properties:
-              fname:
-                type: string
-                description: First name of person to create
-              lname:
-                type: string
-                description: Last name of person to create
-              birthdate:
+              line:
                 type: "string"
-                description: Birthdate yyyy/mm/dd of person to create
-              fcolor:
-                type: "string"
-                description: Favorite color of person to create
-              gender:
-                type: "string"
-                description: Gender of person to create
+                description: line from a csv, psv, or ssv file (LastName | FirstName | Gender | FavoriteColor | DateOfBirth)
       responses:
         201:
           description: Successfully created person in list
-
-# TODO add the three GET ops to get the data sorted by the fields: gender, birthdate, lname.
