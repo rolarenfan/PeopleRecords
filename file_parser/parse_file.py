@@ -6,7 +6,6 @@ import sys
 
 from model.person import (
     Person,
-    sort_by_birthdate, sort_by_gender, sort_by_lastname,
     sorted_list_1, sorted_list_2, sorted_list_3, sorts
 )
 
