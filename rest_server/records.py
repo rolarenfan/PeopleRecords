@@ -1,89 +1,62 @@
-from datetime import datetime
-
 from flask import make_response, abort
 
-def get_timestamp():
-    return datetime.now().strftime(('%Y-%m-%d %H:%M:%S'))
+from file_parser.parse_file import parse_line
+from model.person import (
+    Person,
+    sorted_list_1, sorted_list_2, sorted_list_3
+)
 
-# Data to serve with our API: LastName | FirstName | Gender | FavoriteColor | DateOfBirth
-PEOPLE = {
-    'Fairy': {
-        'lname': 'Fairy',
-        'fname': 'Tooth',
-        'gender': 'Male',
-        'fcolor': 'white',
-        'birthdate': '1220/01/01',
-    },
-    'Who': {
-        'lname': 'Who',
-        'fname': 'Doctor',
-        'gender': 'Non-Binary',
-        'fcolor': 'pink',
-        'birthdate': '1963/11/23',
-    },
-    'Woman': {
-        'lname': 'Woman',
-        'fname': 'Wonder',
-        'gender': 'Female',
-        'fcolor': 'red',
-        'birthdate': '1941/10/25',
-    },
-    'Clark': {
-        'lname': 'Clark',
-        'fname': 'Kent',
-        'gender': 'Male',
-        'fcolor': 'gold',
-        'birthdate': '1938/06/01',
-    },
-    'Easter': {
-        'lname': 'Easter',
-        'fname': 'Bunny',
-        'gender': 'Female',
-        'fcolor': 'white',
-        'birthdate': '1835/04/19',
-    }
-}
+DATA_STORE = []
 
-# Create a handler for our read_all (GET) people, just a temporary placeholder.
-def read_all():
+# Create a handler for our sorted_birthdate (GET) people.
+def sorted_birthdate():
     '''
-    This function responds to a request for /api/records
-    with the complete lists of people
+        This function responds to a request for /api/records/birthdate
 
-    :return:        sorted list of people
+        :return: list of people, soted by birthdate ascending.
     '''
-    # Create the list of people from our data
-    return [PEOPLE[key] for key in sorted(PEOPLE.keys())]
+    return sorted_list_2(DATA_STORE)
+
+# Create a handler for our sorted_gender (GET) people.
+def sorted_gender():
+    '''
+        This function responds to a request for /api/records/gender
+
+        :return: list of people, sorted by gender, then last name.
+    '''
+    return sorted_list_1(DATA_STORE)
+
+# Create a handler for our sorted_name (GET) people.
+def sorted_name():
+    '''
+        This function responds to a request for /api/records/name
+
+        :return: list of people, sorted by last name descending.
+    '''
+    return sorted_list_3(DATA_STORE)
 
 def create(person):
     '''
-    This function creates a new person in the people structure
-    based on the passed in person data
-    :param person:  person to create in people structure
-    :return:        201 on success, 406 on person exists
+        Handler function for POST 'create' request to /api/records:
+        creates a new person in the people structure based on the passed in person data.
+        :param person:  person to create in people structure
+        :return:        201 on success, 406 on person exists
     '''
-    lname = person.get('lname', None)
-    fname = person.get('fname', None)
-    gender = person.get('gender', None)
-    fcolor = person.get('fcolor', None)
-    birthdate = person.get('birthdate', None)
-
-    # Does the person exist already?
-    if lname not in PEOPLE and lname is not None:
-        PEOPLE[lname] = {
-            'lname': lname,
-            'fname': fname,
-            'gender': gender,
-            'fcolor': fcolor,
-            'birthdate': birthdate,
-        }
-        return make_response(
-            '{lname} successfully created'.format(lname=lname), 201
+    line = person.get('line', None)
+    if not line:
+        abort(
+            422,
+            f'Cannot create Person from "None" data',
         )
 
-    # Otherwise, they exist, that's an error
-    else:
+    person_object = Person(parse_line(line))
+    if person_object in DATA_STORE:
         abort(
             406,
-            'Person with last name {lname} already exists'.format(lname=lname),
+            f'Person with last name "{person_object.lname}" already exists',
+        )
+    else:
+        DATA_STORE.append(person_object)
+        return make_response(
+            f'"{str(person_object)}" successfully created', 201
         )
