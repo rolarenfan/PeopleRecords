@@ -1,9 +1,9 @@
 from datetime import date
 
 class Person:
-    """
+    '''
         Simple data-class holding the values of a person, as parsed from the files in /tests/data
-    """
+    '''
     def __init__(self, data):
         (self.lname, self.fname, self.gender, self.fcolor, birthdate) = data
 
@@ -17,45 +17,45 @@ class Person:
 
 
 def sort_by_birthdate(person):
-    """
+    '''
         Key function to sort Person objects by birthdate.
         :param: Person
-    """
+    '''
     return person.birthdate
 
 def sort_by_gender(person):
-    """
+    '''
         Key function to sort Person objects by gender.
         :param: Person
-    """
+    '''
     return person.gender
 
 def sort_by_lastname(person):
-    """
+    '''
         Key function to sort Person objects by last name.
         :param: Person
-    """
+    '''
     return person.lname
 
 def sorted_list_1(people):
-    """
+    '''
         Function to perform required sort #1: sort Person objects by gender, then by last name.
         :param: Person[]
-    """
+    '''
     return [str(person) for person in sorted(sorted(people, key=sort_by_lastname), key=sort_by_gender)]
 
 def sorted_list_2(people):
-    """
+    '''
         Function to perform required sort #1: sort Person objects by birthdate.
         :param: Person[]
-    """
+    '''
     return [str(person) for person in sorted(people, key=sort_by_birthdate)]
 
 def sorted_list_3(people):
-    """
+    '''
         Function to perform required sort #1: sort Person objects by last name, descending.
         :param: Person[]
-    """
+    '''
     return [str(person) for person in sorted(people, key=sort_by_lastname, reverse=True)]
 
 sorts = [
